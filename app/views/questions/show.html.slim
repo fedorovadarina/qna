@@ -1,2 +1,23 @@
-h1= @question.title
-p= @question.body
+span.question_attrs
+  'Question author:
+  em> #{@question.author.email}
+  - if current_user&.author_of?(@question)
+    ' Question actions:
+    = link_to 'delete', question_path(@question),
+                        method: :delete,
+                        data: {confirm: 'Are you sure?'}
+h1.question__title = @question.title
+p.question__body = @question.body
+
+hr
+h2 Answers
+
+- if @question.answers.present?
+  ul.answers-list
+    = render partial: 'answers/answer', collection: @question.answers
+- else
+  p No answers yet
+
+hr
+h2 Create new answer
+= render 'answers/form'

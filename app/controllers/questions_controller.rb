@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :destroy]
+  before_action :load_question, only: [:show, :destroy]
 
   def index
     @questions = Question.all
@@ -13,30 +13,26 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit
-  end
-
   def create
-    @question = Question.new(question_params)
+    @question = Question.create(question_params)
+    @question.author = current_user
 
     if @question.save
-      redirect_to @question, notice: 'Your question successfully created.'
+      redirect_to @question, notice: 'Question successfully created'
     else
+      flash.now[:alert] = 'Please, enter valid data'
       render :new
     end
   end
 
-  def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
-  end
-
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if current_user.author_of?(@question)
+      @question.destroy
+      redirect_to questions_path, notice: 'Question successfully deleted'
+    else
+      flash.now[:alert] = 'Only author can delete question'
+      render :show
+    end
   end
 
   private

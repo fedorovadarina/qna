@@ -1,10 +1,6 @@
-h1 Questions
-ul
-  - @questions.each do |q|
-    li
-      h2
-        = link_to q.title, q
-      p
-        = q.body
-p
-  = link_to 'Ask question', new_question_path
+= link_to 'Ask question', new_question_path
+
+h1 Questions list
+
+ul.content-list
+  = render partial: 'questions/question', collection: @questions
