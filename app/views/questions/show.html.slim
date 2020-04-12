@@ -14,7 +14,7 @@ h2 Answers
 
 - if @question.answers.present?
   ul.answers-list
-    = render partial: 'answers/answer', collection: @question.answers
+    = render @question.answers
 - else
   p No answers yet
 

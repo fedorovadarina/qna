@@ -36,6 +36,6 @@ class AnswersController < ApplicationController
   end
 
   def find_question
-    @question = @answer.nil? ? Question.find(params[:question_id]) : @answer.question
+    @question = @answer&.question || Question.find(params[:question_id])
   end
 end
