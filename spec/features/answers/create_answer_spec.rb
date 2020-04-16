@@ -8,7 +8,7 @@ feature 'user can create answer to the question', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
       visit question_path(question)
@@ -16,26 +16,28 @@ feature 'user can create answer to the question', %q{
 
     scenario 'create a new answer to the question' do
       text = Faker::Number.hexadecimal(10)
-      fill_in 'Body', with: text
-      click_on 'Create answer'
+      fill_in 'Your answer', with: text
+      click_on 'Create Answer'
 
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Answer successfully created'
-      expect(page).to have_content text
+      within '.answers-list' do
+        expect(page).to have_content text
+      end
     end
 
     scenario 'create empty answer' do
-      fill_in 'Body', with: nil
-      click_on 'Create answer'
+      click_on 'Create Answer'
 
-      expect(page).to have_content "Please, enter answer's text"
+      expect(page).to have_content "Please, enter text of answer"
       expect(page).to have_content "Body can't be blank"
     end
   end
 
   scenario 'unAuth user cannot create answer' do
     visit question_path(question)
-    fill_in 'Body', with: 'just sample text'
-    click_on 'Create answer'
+    fill_in 'Your answer', with: 'just sample text'
+    click_on 'Create Answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end

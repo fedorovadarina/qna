@@ -12,11 +12,11 @@ p.question__body = @question.body
 hr
 h2 Answers
 
-- if @question.answers.present?
-  ul.answers-list
+ul.answers-list
+  - if @question.answers.present?
     = render @question.answers
-- else
-  p No answers yet
+  - else
+    li No answers yet
 
 hr
 h2 Create new answer
