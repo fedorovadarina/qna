@@ -18,7 +18,7 @@ feature 'User can create question', %q{
     scenario 'user create question with correct data' do
       fill_in 'Title', with: question.title
       fill_in 'Body', with: question.body
-      click_on 'Create question'
+      click_on 'Create Question'
 
       expect(page).to have_content 'Question successfully created'
       expect(page).to have_content question.title
@@ -26,7 +26,7 @@ feature 'User can create question', %q{
     end
 
     scenario 'user create question without data' do
-      click_on 'Create question'
+      click_on 'Create Question'
 
       expect(page).to have_content 'Please, enter valid data'
     end

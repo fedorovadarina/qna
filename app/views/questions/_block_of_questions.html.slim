@@ -1,0 +1,25 @@
+h1.question__title = @question.title
+p.question__body = @question.body
+span.question_attrs.text-muted
+  'Question author: <em>#{@question.author.email}</em>
+  - if current_user&.author_of?(@question)
+    ' Question actions:
+    = link_to 'Edit', '#', class: 'edit-question-link'
+    = link_to 'delete', question_path(@question),
+              method: :delete,
+              data: {confirm: 'Are you sure?'}
+
+  = form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
+    .question-errors
+       = render 'shared/errors', resource: @question
+    .form-group.row
+      = f.label :title, class: 'col-sm-2 col-form-label'
+      .col-sm-10
+        = f.text_field :title, class: 'form-control'
+    .form-group.row
+      = f.label :body, class: 'col-sm-2 col-form-label'
+      .col-sm-10
+        = f.text_area :body, class: 'form-control'
+    .form-group.row
+      .col
+        = f.submit class: 'btn btn-primary float-right'

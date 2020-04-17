@@ -1,27 +1,38 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_answer, only: :destroy
-  before_action :find_question, only: [:create, :destroy]
+  before_action :find_answer, only: [:update, :destroy, :best]
+  before_action :find_question, only: [:create, :update, :destroy, :best]
+  before_action :authority!, only: [:update, :destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
 
     if @answer.save
-      redirect_to @question, notice: 'Answer successfully created'
+      flash.now[:notice] = 'Answer successfully created'
     else
-      flash.now[:alert] = "Please, enter answer's text"
-      render 'questions/show'
+      flash.now[:alert] = "Please, enter text of answer"
+    end
+  end
+
+  def update
+    if @answer.update(answer_params)
+      flash.now[:notice] = 'Answer successfully edited'
+    else
+      flash.now[:alert] = 'Editing answer failed'
     end
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Answer successfully deleted'
+    @answer.destroy
+    flash.now[:notice] = 'Answer successfully deleted'
+  end
+
+  def best
+    if current_user.author_of?(@question)
+      @answer.set_best!
     else
-      flash.now[:alert] = 'Only author can delete answer'
-      render 'questions/show'
+      flash.now[:alert] = 'You must be the author of question'
     end
   end
 
@@ -29,6 +40,13 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def authority!
+    unless current_user.author_of?(@answer)
+      flash.now[:alert] = 'You must be the author of answer'
+      render 'questions/show'
+    end
   end
 
   def find_answer

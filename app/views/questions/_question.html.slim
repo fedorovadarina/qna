@@ -1,5 +1,6 @@
-li.content-list-item
-  h2.question__title
-    a.question__title-link [href=question_path(question)] = question.title
-  span.question__attrs Author: <strong>#{question.author.email}</strong>,
-                       answers: #{question.answers.count}
+li.card.content-list-item
+  .card-body
+    h5.card-title.question__title
+      a.question__title-link href="#{question_path(question)}" = question.title
+    h6.card-subtitle.mb-2.text-muted.question__attrs
+      'Author: <strong>#{question.author.email}</strong>, answers: #{question.answers.count}
