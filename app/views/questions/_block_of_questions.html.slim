@@ -10,7 +10,7 @@ span.question_attrs.text-muted
               data: {confirm: 'Are you sure?'}
 
   = form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
-    #question-errors
+    .question-errors
        = render 'shared/errors', resource: @question
     .form-group.row
       = f.label :title, class: 'col-sm-2 col-form-label'
