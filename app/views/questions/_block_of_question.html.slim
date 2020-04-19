@@ -4,7 +4,13 @@ p.question__body = @question.body
   p
     'File:
     - @question.files.each do |file|
-      span>= link_to file.filename.to_s, url_for(file)
+      span>
+        = link_to file.filename.to_s, url_for(file)
+        = link_to delete_file_question_path(file),
+                method: :delete,
+                data: {confirm: 'Are you sure?', 'file-id': file.id},
+                :remote => true
+
 p.question_attrs.text-muted
   'Question author: <em>#{@question.author.email}</em>
   - if current_user&.author_of?(@question)
