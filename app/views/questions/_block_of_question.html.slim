@@ -1,6 +1,10 @@
 h1.question__title = @question.title
 p.question__body = @question.body
-span.question_attrs.text-muted
+- if @question.files.attached?
+  p
+  - @question.files.each do |file|
+    span>= link_to file.filename.to_s, url_for(file)
+p.question_attrs.text-muted
   'Question author: <em>#{@question.author.email}</em>
   - if current_user&.author_of?(@question)
     ' Question actions:

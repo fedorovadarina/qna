@@ -30,6 +30,17 @@ feature 'User can create question', %q{
 
       expect(page).to have_content 'Please, enter valid data'
     end
+
+    scenario 'asks a question with attached file' do
+      fill_in 'Title', with: question.title
+      fill_in 'Body', with: question.body
+
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Create Question'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+    end
   end
 
   scenario 'Unauthenticated user cannot ask a question' do

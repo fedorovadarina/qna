@@ -1,14 +1,5 @@
-span.question_attrs
-  'Question author:
-  em> #{@question.author.email}
-  - if current_user&.author_of?(@question)
-    ' Question actions:
-    = link_to 'delete', question_path(@question),
-                        method: :delete,
-                        data: {confirm: 'Are you sure?'}
-h1.question__title = @question.title
-p.question__body = @question.body
-
+#question
+  =render 'block_of_question'
 hr
 h2 Answers
 
