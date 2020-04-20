@@ -9,6 +9,10 @@ RSpec.describe Answer, type: :model do
   let!(:answer) { create(:answer, question: question) }
   let!(:answers) { create_list(:answer, 3, question: question) }
 
+  it 'have many attached files' do
+    expect(Answer.new.files).to be_an_instance_of ActiveStorage::Attached::Many
+  end
+
   describe 'set best attribute' do
     it 'to true' do
       answer.set_best!

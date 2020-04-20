@@ -46,26 +46,37 @@ feature 'User can edit his question', %q{
     end
 
     scenario 'adding attachment' do
-      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Update Question'
+      within '#edit-question-form' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Question'
+      end
 
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
+      expect(page).to have_content 'Question successfully edited'
     end
 
     scenario 'deleting attached files' do
-      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Update Question'
+      within '#edit-question-form' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update Question'
+      end
 
-      first("a[data-method='delete']").click
+      within '.attached-files' do
+        first("a[data-method='delete']").click
+      end
 
+      page.driver.browser.switch_to.alert.accept
       expect(page).to_not have_link 'rails_helper.rb'
+      expect(page).to have_content 'rails_helper.rb successfully deleted'
     end
   end
 
-  scenario 'Unauthenticated user cannot edit a question' do
-    visit question_path(question)
+  describe 'Unauthenticated user', js: true do
+    scenario 'cannot edit a question' do
+      visit question_path(question)
 
-    expect(page).not_to have_link 'Edit'
+      expect(page).not_to have_link 'Edit'
+    end
   end
 end
