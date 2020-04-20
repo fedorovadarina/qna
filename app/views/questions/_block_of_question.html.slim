@@ -37,7 +37,7 @@ p.question_attrs.text-muted
       = f.label :files, class: 'col-sm-2 col-form-label'
         'File
       .col-sm-10
-        = f.file_field :files, multiple: true, class: 'form-control-file'
+        = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
     .form-group.row
       .col
         = f.submit class: 'btn btn-primary float-right'
