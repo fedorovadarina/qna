@@ -2,5 +2,5 @@ $('.question-errors').html('<%= render 'shared/errors', resource: @question %>')
 $('#flash').html('<%= render 'shared/flash' %>');
 
 <% unless @question.errors.present? %>
-  $('#question').html('<%= j render 'block_of_questions' %>');
+  $('#question').html('<%= j render 'block_of_question' %>');
 <% end %>

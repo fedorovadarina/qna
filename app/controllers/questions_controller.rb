@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :update, :destroy, :delete_file]
   before_action :load_question, only: [:show, :update, :destroy, :best_answer]
   before_action :authority!, only: [:update, :destroy, :best_answer]
 
@@ -49,10 +49,10 @@ class QuestionsController < ApplicationController
   end
 
   def load_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 end
