@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   it { should belong_to(:question) }
+  it { should have_many(:links).dependent(:destroy) }
+
   it { should validate_presence_of :body }
+  it { should accept_nested_attributes_for :links }
   it { should have_db_column(:best).of_type(:boolean) }
 
   let(:question) { create(:question) }

@@ -80,8 +80,6 @@ feature 'User can edit his answer', %q{
       expect(page).to have_content 'rails_helper.rb successfully deleted'
     end
 
-
-
     scenario "tries to edit other user's question" do
       within page.find('li', text: user2.email) do
         expect(page).to have_no_link 'Edit'

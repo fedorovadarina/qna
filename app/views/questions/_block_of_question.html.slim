@@ -1,5 +1,11 @@
 h1.question__title = @question.title
 p.question__body = @question.body
+- if @question.links.present?
+  p.links
+    'Links:
+    - @question.links.each do |link|
+      span>
+        = link_to link.name, link.url
 - if @question.files.attached?
   p.attached-files
     'File:

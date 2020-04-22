@@ -17,6 +17,18 @@
         'File
       .col-sm-10
         = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
+
+    p Links:
+    = f.fields_for :links do |l|
+      .form-row
+        .form-group.col-md-6
+          = l.label :name, class: 'col-form-label'
+            'Link name
+          = l.text_field :name, class: 'form-control'
+        .form-group.col-md-6
+          = l.label :url, class: 'col-form-label'
+            'Link URL
+          = l.text_field :url, class: 'form-control'
     .form-group.row
       .col
         = f.submit class: 'btn btn-primary float-right'

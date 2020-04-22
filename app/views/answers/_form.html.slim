@@ -1,7 +1,7 @@
 .answer-errors
   = render 'shared/errors', resource: @answer
 #answer-form
-  = form_with model: [@question, Answer.new] do |f|
+  = form_with model: [@question, @answer] do |f|
     .form-group.row
       = f.label :body, class: 'col-sm-2 col-form-label'
         'Your answer
@@ -12,6 +12,17 @@
         'File
       .col-sm-10
         = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
+    p Links:
+    = f.fields_for :links do |l|
+      .form-row
+        .form-group.col-md-6
+          = l.label :name, class: 'col-form-label'
+            'Link name
+          = l.text_field :name, class: 'form-control'
+        .form-group.col-md-6
+          = l.label :url, class: 'col-form-label'
+            'Link URL
+          = l.text_field :url, class: 'form-control'
     .form-group.row
       .col
         = f.submit class: 'btn btn-primary float-right'
