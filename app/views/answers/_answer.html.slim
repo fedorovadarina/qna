@@ -16,6 +16,11 @@
           - answer.links.each do |link|
             span>
               = link_to link.name, link.url
+              - if link.gist_link?
+                br
+                - GistService.new(link).content.each do |filename, content|
+                  em =filename
+                  pre =content
       - if answer.files.attached?
         p.attached-files
           'File:

@@ -33,6 +33,8 @@ gem 'jbuilder', '~> 2.5'
 # Amazon S3
  gem 'aws-sdk-s3'
 
+gem "octokit", "~> 4.0"
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

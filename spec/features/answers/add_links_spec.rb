@@ -11,6 +11,7 @@ feature 'User can add links to answer', %q{
   given(:link1) { create(:link) }
   given(:link2) { create(:link) }
   given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
+  given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
   
   background do
     sign_in(user)
@@ -41,6 +42,22 @@ feature 'User can add links to answer', %q{
       within '.answers-list' do
         expect(page).to have_link link1.name, href: link1.url
         expect(page).to have_link link2.name, href: link2.url
+      end
+    end
+
+    scenario 'user add gist link' do
+      within('#answer-form') do
+        fill_in 'Your answer', with: 'My answer'
+
+        fill_in 'Link name', with: 'Gist link'
+        fill_in 'Link URL', with: gist_url
+
+        click_on 'Create Answer'
+      end
+
+      within '.answers-list' do
+        expect(page).to have_link 'Gist link', href: gist_url
+        expect(page).to have_content "puts 'Hello, world!"
       end
     end
   end

@@ -10,6 +10,7 @@ feature 'User can add links to question', %q{
   given(:question) { create(:question, author: user) }
   given(:link1) { create(:link) }
   given(:link2) { create(:link) }
+  given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
 
   describe 'When create question' do
     background do
@@ -61,6 +62,20 @@ feature 'User can add links to question', %q{
 
       expect(page).to_not have_link 'Link name', href: 'invalid.url'
       expect(page).to have_content 'url is invalid'
+
+    end
+
+    scenario 'user add gist links' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
+
+      fill_in 'Link name', with: 'Gist link'
+      fill_in 'Link URL', with: gist_url
+
+      click_on 'Create Question'
+
+      expect(page).to have_link 'Gist link', href: gist_url
+      expect(page).to have_content "puts 'Hello, world!"
     end
   end
 
