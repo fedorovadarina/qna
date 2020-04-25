@@ -11,7 +11,7 @@
                         'aria-pressed': "false",
                         params: { question: @question }}
       - if answer.links.present?
-        p.links
+        p.links-list
           'Links:
           - answer.links.each do |link|
             span>
@@ -38,18 +38,4 @@
                 data: {confirm: 'Are you sure?'},
                 remote: true
         = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
-          .edit-answer-errors
-            = render 'shared/errors', resource: @answer
-          .form-group.row
-            = f.label :body, class: 'col-sm-2 col-form-label'
-              'Your answer
-            .col-sm-10
-              = f.text_area :body, class: 'form-control'
-          .form-group.row
-            = f.label :files, class: 'col-sm-2 col-form-label'
-              'File
-            .col-sm-10
-              = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-          .form-group.row
-            .col
-              = f.submit class: 'btn btn-primary float-right'
+          = render partial: 'answers/form_fields', locals: {f: f}

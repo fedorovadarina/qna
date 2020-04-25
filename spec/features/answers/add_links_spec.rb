@@ -8,22 +8,74 @@ feature 'User can add links to answer', %q{
 
   given(:user) {create(:user)}
   given!(:question) {create(:question)}
-  given(:gist_url) {'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c'}
-
-  scenario 'User adds link when give an answer', js: true do
+  given(:link1) { create(:link) }
+  given(:link2) { create(:link) }
+  given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
+  
+  background do
     sign_in(user)
 
     visit question_path(question)
+  end
 
-    fill_in 'Your answer', with: 'My answer'
+  describe 'When create answer', js: true do
+    scenario 'User add some links' do
+      within('#answer-form') do
+        fill_in 'Your answer', with: 'My answer'
 
-    fill_in 'Link name', with: 'My gist'
-    fill_in 'Link URL', with: gist_url
+        fill_in 'Link name', with: link1.name
+        fill_in 'Link URL', with: link1.url
 
-    click_on 'Create Answer'
+        click_on 'add link'
 
-    within '.answers-list' do
-      expect(page).to have_link 'My gist', href: gist_url
+        new_link_nested_form = all('.nested-fields').last
+
+        within(new_link_nested_form) do
+          fill_in 'Link name', with: link2.name
+          fill_in 'Link URL', with: link2.url
+        end
+
+        click_on 'Create Answer'
+      end
+
+      within '.answers-list' do
+        expect(page).to have_link link1.name, href: link1.url
+        expect(page).to have_link link2.name, href: link2.url
+      end
     end
+  end
+
+  describe 'When edit answer', js: true do
+    scenario 'user add links' do
+      within '.answers-list' do
+        first(:link, 'Edit').click
+
+        first(:link, 'add link').click
+
+        new_link_nested_form = all('.nested-fields').last
+        within(new_link_nested_form) do
+          fill_in 'Link name', with: link1.name
+          fill_in 'Link URL', with: link1.url
+        end
+
+        first(:link, 'add link').click
+
+        new_link_nested_form = all('.nested-fields').last
+        within(new_link_nested_form) do
+          fill_in 'Link name', with: link2.name
+          fill_in 'Link URL', with: link2.url
+        end
+
+        click_on 'Update Answer'
+
+        within('.links-list') do
+          expect(page).to have_link link1.name, href: link1.url
+          expect(page).to have_link link2.name, href: link2.url
+        end
+      end
+    end
+
+    scenario 'user deletes one link'
+    scenario 'user deletes all links'
   end
 end
