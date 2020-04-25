@@ -10,17 +10,9 @@
                         remote: true,
                         'aria-pressed': "false",
                         params: { question: @question }}
-      - if answer.links.present?
-        p.links-list
-          'Links:
-          - answer.links.each do |link|
-            span>
-              = link_to link.name, link.url
-              - if link.gist_link?
-                br
-                - GistService.new(link).content.each do |filename, content|
-                  em =filename
-                  pre =content
+
+      = render 'shared/links', resource: answer
+
       - if answer.files.attached?
         p.attached-files
           'File:

@@ -1,16 +1,8 @@
 h1.question__title = @question.title
 p.question__body = @question.body
-- if @question.links.present?
-  p.links-list
-    'Links:
-    - @question.links.each do |link|
-      span>
-        = link_to link.name, link.url
-        - if link.gist_link?
-          br
-          - GistService.new(link).content.each do |filename, content|
-            em = filename
-            pre = content
+
+= render 'shared/links', resource: @question
+
 - if @question.files.attached?
   p.attached-files
     'File:

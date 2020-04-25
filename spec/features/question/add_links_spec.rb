@@ -11,6 +11,7 @@ feature 'User can add links to question', %q{
   given(:link1) { create(:link) }
   given(:link2) { create(:link) }
   given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
+  given!(:regular_link) { question.links.create!(name: 'Regular link', url: 'http://ya.ru') }
 
   describe 'When create question' do
     background do
@@ -113,7 +114,13 @@ feature 'User can add links to question', %q{
       end
     end
 
-    scenario 'user deletes one link'
-    scenario 'user deletes all links'
+    scenario 'user deletes link' do
+      within('#question') do
+        click_on 'remove link'
+        click_on 'Update Question'
+
+        expect(page).to_not have_link regular_link.name, href: regular_link.url
+      end
+    end
   end
 end

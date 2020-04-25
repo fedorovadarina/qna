@@ -12,6 +12,7 @@ feature 'User can add links to answer', %q{
   given(:link2) { create(:link) }
   given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
   given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
+  given!(:regular_link) { answers.first.links.create!(name: 'Regular link', url: 'http://ya.ru') }
   
   background do
     sign_in(user)
@@ -92,7 +93,15 @@ feature 'User can add links to answer', %q{
       end
     end
 
-    scenario 'user deletes one link'
-    scenario 'user deletes all links'
+    scenario 'user deletes link' do
+      within '.answers-list' do
+        first(:link, 'Edit').click
+
+        click_on 'remove link'
+        click_on 'Update Answer'
+
+        expect(page).to_not have_link regular_link.name, href: regular_link.url
+      end
+    end
   end
 end
