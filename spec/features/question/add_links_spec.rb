@@ -49,6 +49,19 @@ feature 'User can add links to question', %q{
         expect(page).to have_link link2.name, href: link2.url
       end
     end
+
+    scenario 'tries to add invalid link' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
+
+      fill_in 'Link name', with: 'Link name'
+      fill_in 'Link URL', with: 'invalid.url'
+
+      click_on 'Create Question'
+
+      expect(page).to_not have_link 'Link name', href: 'invalid.url'
+      expect(page).to have_content 'url is invalid'
+    end
   end
 
   describe 'When edit question', js: true do
