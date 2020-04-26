@@ -27,6 +27,7 @@ p.question_attrs.text-muted
   - if current_user&.author_of?(@question)
     ' Question actions:
     = link_to 'Edit', '#', class: 'edit-question-link'
+    ' |
     = link_to 'Delete', question_path(@question),
               method: :delete,
               data: {confirm: 'Are you sure?'}
