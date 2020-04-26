@@ -16,6 +16,8 @@ class Answer < ApplicationRecord
       status = !best
       question.answers.update_all(best: false)
       update!(best: status)
+
+      question.set_reward!(author)
     end
   end
 end

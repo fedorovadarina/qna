@@ -24,7 +24,7 @@ feature 'User can add reward to question', %q{
       click_on 'Create Question'
 
       expect(page).to have_content 'reward.name'
-      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_css("img[src*='rails_helper.rb']")
     end
 
     scenario 'tries to add reward with empty name' do

@@ -12,6 +12,9 @@ RSpec.describe Answer, type: :model do
   let!(:answer) { create(:answer, question: question) }
   let!(:answers) { create_list(:answer, 3, question: question) }
 
+  let!(:question_reward) { create(:question, :with_reward) }
+  let!(:answers_reward) { create_list(:answer, 3, question: question_reward) }
+
   it 'have many attached files' do
     expect(Answer.new.files).to be_an_instance_of ActiveStorage::Attached::Many
   end
@@ -34,6 +37,13 @@ RSpec.describe Answer, type: :model do
       question.answers.each(&:set_best!)
 
       expect(question.answers.where(best: true).count).to eq 1
+    end
+
+    it 'set question reward for best answer author' do
+      ans = answers_reward.sample
+      ans.set_best!
+
+      expect(question_reward.reward.user).to eq ans.author
     end
   end
 

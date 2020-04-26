@@ -10,4 +10,8 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :reward, reject_if: :all_blank, allow_destroy: true
 
   validates :title, :body, presence: true
+
+  def set_reward!(author)
+    reward&.update!(user: author)
+  end
 end
