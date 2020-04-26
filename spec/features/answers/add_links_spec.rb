@@ -13,7 +13,7 @@ feature 'User can add links to answer', %q{
   given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
   given(:gist_url) { 'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c' }
   given!(:regular_link) { answers.first.links.create!(name: 'Regular link', url: 'http://ya.ru') }
-  
+
   background do
     sign_in(user)
 

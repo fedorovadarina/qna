@@ -40,7 +40,8 @@ feature 'User can add links to question', %q{
 
       click_on 'add link'
 
-      new_link_nested_form = all('.nested-fields').last
+      new_link_nested_form = all('.links > .nested-fields').last
+
       within(new_link_nested_form) do
         fill_in 'Link name', with: link2.name
         fill_in 'Link URL', with: link2.url
@@ -63,7 +64,6 @@ feature 'User can add links to question', %q{
 
       expect(page).to_not have_link 'Link name', href: 'invalid.url'
       expect(page).to have_content 'url is invalid'
-
     end
 
     scenario 'user add gist links' do

@@ -20,6 +20,20 @@
     = render 'shared/link_fields', f: l
   .links-actions
     = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+
+.reward-form
+  = f.fields_for :reward do |r|
+    .nested-fields
+      .form-row
+        .form-group.col-md-6
+          = r.label :name, class: 'col-form-label'
+            'Reward name
+          = r.text_field :name, class: 'form-control'
+        .form-group.col-md-6
+          = r.label :image, class: 'col-form-label'
+            'Reward image
+          = r.file_field :image, class: 'form-control-file'
+
 .form-group.row
   .col
     = f.submit class: 'btn btn-primary float-right'
