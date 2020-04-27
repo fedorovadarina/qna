@@ -1,0 +1,20 @@
+section#profile
+  h1 User profile
+  p
+    'Email:
+    strong = @user.email
+
+  hr
+  h3 Rewards
+  .rewards-list
+    - @user.rewards.each do |reward|
+      .rewards-list__item
+        .card.col-3
+          = image_tag(url_for(reward.image),
+                      alt: reward.name,
+                      class: 'card-img-top')
+          .card-body
+            h5.card-title =reward.name
+            p.card-text
+              'Best answer for question
+              strong =reward.question.title

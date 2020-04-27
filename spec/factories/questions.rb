@@ -16,6 +16,10 @@ FactoryBot.define do
       end
     end
 
+    trait :with_reward do
+      reward { create(:reward) }
+    end
+
     factory :questions_list do
       sequence(:title) { |n| "Question Title #{n} #{Faker::Number.hexadecimal(digits: 2)}" }
       sequence(:body) { |n| "Question Body #{n} #{Faker::Number.hexadecimal(digits: 4)}" }

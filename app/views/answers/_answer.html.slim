@@ -11,6 +11,8 @@
                         'aria-pressed': "false",
                         params: { question: @question }}
 
+      = render 'shared/links', resource: answer
+
       - if answer.files.attached?
         p.attached-files
           'File:
@@ -28,23 +30,10 @@
       - if current_user&.author_of?(answer)
         'Actions:
         = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+        ' |
         = link_to 'Delete', answer_path(answer),
                 method: :delete,
                 data: {confirm: 'Are you sure?'},
                 remote: true
         = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
-          .edit-answer-errors
-            = render 'shared/errors', resource: @answer
-          .form-group.row
-            = f.label :body, class: 'col-sm-2 col-form-label'
-              'Your answer
-            .col-sm-10
-              = f.text_area :body, class: 'form-control'
-          .form-group.row
-            = f.label :files, class: 'col-sm-2 col-form-label'
-              'File
-            .col-sm-10
-              = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-          .form-group.row
-            .col
-              = f.submit class: 'btn btn-primary float-right'
+          = render partial: 'answers/form_fields', locals: {f: f}

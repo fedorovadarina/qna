@@ -1,6 +1,9 @@
 class Answer < ApplicationRecord
   belongs_to :author, class_name: 'User'
   belongs_to :question
+  has_many :links, dependent: :destroy, as: :linkable
+
+  accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
   has_many_attached :files
 
@@ -13,6 +16,8 @@ class Answer < ApplicationRecord
       status = !best
       question.answers.update_all(best: false)
       update!(best: status)
+
+      question.set_reward!(author)
     end
   end
 end

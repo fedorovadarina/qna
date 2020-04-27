@@ -1,0 +1,11 @@
+- if resource.links.present?
+  p.links-list
+    'Links:
+    - resource.links.each do |link|
+      span>
+        = link_to link.name, link.url
+        - if link.gist_link?
+          br
+          - GistService.new(link).content.each do |filename, content|
+            em = filename
+            pre = content

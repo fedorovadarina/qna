@@ -17,7 +17,7 @@ feature 'User can delete his question', %q{
 
     scenario 'user tries to delete his question' do
       visit question_path(question_user1)
-      click_on 'delete'
+      click_on 'Delete'
 
       expect(page).to have_content 'Question successfully deleted'
       expect(page).to_not have_content question_user1.title
