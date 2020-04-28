@@ -2,12 +2,14 @@ class Answer < ApplicationRecord
   belongs_to :author, class_name: 'User'
   belongs_to :question
   has_many :links, dependent: :destroy, as: :linkable
+  has_many :votes, dependent: :destroy, as: :votable
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
   has_many_attached :files
 
   validates :body, presence: true
+  validates :rating, presence: true, numericality: { only_integer: true }
 
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
