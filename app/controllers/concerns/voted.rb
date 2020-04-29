@@ -47,7 +47,7 @@ module Voted
   def render_errors
     respond_to do |format|
       format.json do
-        render json: @vote.errors.full_messages, status: :unprocessable_entity
+        render json: { error: error.message }, status: :unprocessable_entity
       end
     end
   end

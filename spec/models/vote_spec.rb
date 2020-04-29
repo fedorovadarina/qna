@@ -15,8 +15,4 @@ RSpec.describe Vote, type: :model do
   it 'change vote value to minus' do
     expect { vote.vote_minus }.to change { vote.value }.by(-2)
   end
-
-  it 'change rating to minus (plus by default)' do
-    expect { vote.vote_plus }.to change { question.rating }.by(-1)
-  end
 end

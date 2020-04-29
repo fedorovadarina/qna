@@ -22,7 +22,7 @@ RSpec.shared_examples 'voted' do
 
       it 'render json' do
         post :vote_up, params: { id: model_user2 }, format: :json
-        json_response = { "resource" => model_user2.class.name.downcase, "rating" => 1 }
+        json_response = { "resource" => model_user2.class.name.downcase, "rating" => Vote::RATE[:plus] }
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)).to eq json_response
@@ -31,19 +31,7 @@ RSpec.shared_examples 'voted' do
 
     context 'with invalid attributes' do
       it 'not saves vote in the database' do
-        expect { post :vote_up, params: { id: model_user1 }, format: :json }.to_not change(Vote, :count)
-      end
-
-      it 'not assign vote to the logged user' do
-        post :vote_up, params: { id: model_user1 }, format: :json
-
-        expect(Vote.last).to eq nil
-      end
-
-      it 'render json errors' do
-        post :vote_up, params: { id: model_user1 }, format: :json
-
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect { post :vote_up, params: { id: model_user1 }, format: :json }.to raise_error ActiveRecord::RecordInvalid
       end
     end
   end
@@ -64,7 +52,7 @@ RSpec.shared_examples 'voted' do
 
       it 'render json' do
         post :vote_down, params: { id: model_user2 }, format: :json
-        json_response = { "resource" => model_user2.class.name.downcase, "rating" => -1 }
+        json_response = { "resource" => model_user2.class.name.downcase, "rating" => Vote::RATE[:minus] }
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)).to eq json_response
@@ -73,19 +61,7 @@ RSpec.shared_examples 'voted' do
 
     context 'with invalid attributes' do
       it 'not saves vote in the database' do
-        expect { post :vote_down, params: { id: model_user1 }, format: :json }.to_not change(Vote, :count)
-      end
-
-      it 'not assign vote to the logged user' do
-        post :vote_down, params: { id: model_user1 }, format: :json
-
-        expect(Vote.last).to eq nil
-      end
-
-      it 'render json errors' do
-        post :vote_down, params: { id: model_user1 }, format: :json
-
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect { post :vote_down, params: { id: model_user1 }, format: :json }.to raise_error ActiveRecord::RecordInvalid
       end
     end
   end
