@@ -10,26 +10,35 @@ feature 'User can vote for favorite question/answer', %q{
   given!(:question) { create(:question) }
   given!(:answers) { create_list(:answers_list, 3, question: question, author: user) }
 
-  background do
-    sign_in(user)
-    visit question_path(question)
-  end
-
-  describe 'User vote for answer', js: true do
-    scenario 'one time up'
-    scenario 'one time down'
-    scenario 'tries to vote second time up'
-    scenario 'tries to vote second time down'
-    scenario 'remove his vote'
-    scenario 'tries to vote his answer'
-  end
-
   describe 'User vote for question', js: true do
-    scenario 'one time up'
-    scenario 'one time down'
+    background do
+      sign_in(user)
+      visit question_path(question)
+    end
+
+    scenario 'one time up' do
+      first(:xpath, "//a[@title='Vote up!']").click
+
+      expect(first('.vote-rating')).to have_content '1'
+    end
+
+    scenario 'one time down' do
+      first(:xpath, "//a[@title='Vote down!']").click
+
+      expect(first('.vote-rating')).to have_content '-1'
+    end
+
     scenario 'tries to vote second time up'
     scenario 'tries to vote second time down'
     scenario 'remove his vote'
     scenario 'tries to vote his answer'
+  end
+
+  describe 'Non-auth user tries to vote', js: true do
+    scenario 'but page cannot have links for voting' do
+      visit question_path(question)
+
+      expect(page).to_not have_css '.vote-link'
+    end
   end
 end

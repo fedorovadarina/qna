@@ -22,6 +22,8 @@ p.question__body = @question.body
       br
       = @question.reward.name
 
+= render 'shared/votes', resource: @question
+
 p.question_attrs.text-muted
   'Question author: <em>#{@question.author.email}</em>
   - if current_user&.author_of?(@question)

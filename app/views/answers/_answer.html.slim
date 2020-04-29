@@ -1,7 +1,7 @@
 - if answer.persisted?
   = content_tag :li, class: "card answer-list__item #{'best-answer' if answer.best}", data: { 'answer-id': answer.id }
     .card-body
-      h5.card-title = answer.body
+      = render 'shared/votes', resource: answer
       - if current_user&.author_of?(@question)
         = button_to 'Select as best answer', best_answer_path(answer),
                 { class: "btn btn-outline-primary float-right btn-best-answer",
@@ -10,7 +10,7 @@
                         remote: true,
                         'aria-pressed': "false",
                         params: { question: @question }}
-
+      h5.card-title = answer.body
       = render 'shared/links', resource: answer
 
       - if answer.files.attached?

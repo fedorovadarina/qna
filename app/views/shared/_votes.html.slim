@@ -1,0 +1,19 @@
+- if current_user
+  .votes
+    .vote-up
+      = link_to polymorphic_path(resource, action: :vote_up),
+              title: 'Vote up!',
+              class: 'vote-link',
+              remote: true, method: :post,
+              data: { type: :json, resource_id: resource.id } do
+
+    = content_tag :div, class: 'vote-rating',
+          data: { "#{resource.class.name}-id": resource.id } do
+      = resource.rating
+
+    .vote-down
+      = link_to polymorphic_path(resource, action: :vote_down),
+              title: 'Vote down!',
+              class: 'vote-link',
+              remote: true, method: :post,
+              data: {type: :json, resource_id: resource.id} do

@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!
   before_action :find_answer, only: [:update, :destroy, :best]
   before_action :find_question, only: [:create, :update, :destroy, :best]
