@@ -1,39 +1,39 @@
 - if answer.persisted?
   = content_tag :li, class: "card answer-list__item #{'best-answer' if answer.best}", data: { 'answer-id': answer.id }
-    .card-body
-      = render 'shared/votes', resource: answer
-      - if current_user&.author_of?(@question)
-        = button_to 'Select as best answer', best_answer_path(answer),
-                { class: "btn btn-outline-primary float-right btn-best-answer",
-                        method: :patch,
-                        type: "button",
-                        remote: true,
-                        'aria-pressed': "false",
-                        params: { question: @question }}
-      h5.card-title = answer.body
-      = render 'shared/links', resource: answer
+    .card-body.row
+      .actions.col-1.text-center
+        = render 'shared/votes', resource: answer
 
-      - if answer.files.attached?
-        p.attached-files
-          'File:
-          - answer.files.each do |file|
-            span>
-              = link_to file.filename.to_s, url_for(file)
-              = link_to attachment_path(file),
-                      method: :delete,
-                      data: {confirm: 'Are you sure?'},
-                      remote: true
-      
-      h6.card-subtitle.mb-2.text-muted.answer__attrs>
-        'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}
+        - if current_user&.author_of?(@question)
+          .link-best
+            = link_to_best(answer)
 
-      - if current_user&.author_of?(answer)
-        'Actions:
-        = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-        ' |
-        = link_to 'Delete', answer_path(answer),
-                method: :delete,
-                data: {confirm: 'Are you sure?'},
-                remote: true
-        = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
-          = render partial: 'answers/form_fields', locals: {f: f}
+        - if current_user&.author_of?(answer)
+          .link-edit
+            = link_to '#', title: 'Edit', class: 'edit-answer-link', data: {answer_id: answer.id}
+          .link-delete
+            = link_to answer_path(answer), title: 'Delete',
+                    method: :delete,
+                    data: {confirm: 'Are you sure?'},
+                    remote: true
+
+      .card-content.col-11
+        h5.card-title = answer.body
+        = render 'shared/links', resource: answer
+
+        - if answer.files.attached?
+          p.attached-files
+            'File:
+            - answer.files.each do |file|
+              span>
+                = link_to file.filename.to_s, url_for(file)
+                = link_to attachment_path(file),
+                        method: :delete,
+                        data: {confirm: 'Are you sure?'},
+                        :remote => true
+
+        h6.card-subtitle.mb-2.text-muted.answer__attrs>
+          'Author: <strong>#{answer.author.email}</strong> at #{answer.updated_at}
+        - if current_user&.author_of?(answer)
+          = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
+            = render partial: 'answers/form_fields', locals: {f: f}

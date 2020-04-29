@@ -7,6 +7,6 @@ module VotesHelper
             title: "Vote #{action}!",
             class: "vote-link #{vote_active_class}",
             remote: true, method: :post,
-            data: {type: :json, "#{resource.class.name}-id": resource.id}
+            data: { type: :json, "#{resource.class.name}-id": resource.id }
   end
 end
