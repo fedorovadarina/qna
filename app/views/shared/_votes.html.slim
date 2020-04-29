@@ -1,19 +1,11 @@
-- if current_user
-  .votes
+.votes.d-flex.flex-column
+  - if current_user && !current_user.author_of?(resource)
     .vote-up
-      = link_to polymorphic_path(resource, action: :vote_up),
-              title: 'Vote up!',
-              class: 'vote-link',
-              remote: true, method: :post,
-              data: { type: :json, resource_id: resource.id } do
+      = vote_link(resource, :up)
 
-    = content_tag :div, class: 'vote-rating',
-          data: { "#{resource.class.name}-id": resource.id } do
-      = resource.rating
+    .vote-down.order-3
+      = vote_link(resource, :down)
 
-    .vote-down
-      = link_to polymorphic_path(resource, action: :vote_down),
-              title: 'Vote down!',
-              class: 'vote-link',
-              remote: true, method: :post,
-              data: {type: :json, resource_id: resource.id} do
+  = content_tag :div, class: 'vote-rating',
+          data: {"#{resource.class.name}-id": resource.id} do
+    = resource.rating
