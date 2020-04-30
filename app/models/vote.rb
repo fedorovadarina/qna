@@ -54,6 +54,6 @@ class Vote < ApplicationRecord
   end
 
   def validate_user_not_author
-    errors.add(:user, "can't vote for your own #{votable_type}") if user&.author_of?(votable)
+    errors.add(:user, message: "User can't vote for your own #{votable_type}") if user&.author_of?(votable)
   end
 end

@@ -4,6 +4,8 @@ module Voted
   included do
     before_action :set_votable, only: [:vote_up, :vote_down]
     before_action :set_vote, only: [:vote_up, :vote_down]
+
+    rescue_from ActiveRecord::RecordInvalid, with: :render_errors
   end
 
   def vote_up
@@ -47,7 +49,7 @@ module Voted
   def render_errors
     respond_to do |format|
       format.json do
-        render json: { error: error.message }, status: :unprocessable_entity
+        render json: @vote.errors, status: :unprocessable_entity
       end
     end
   end
