@@ -18,7 +18,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'one time up' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_up = first(:xpath, "//a[@title='Vote up!']")
         link_vote_up.click
         sleep 0.5
@@ -29,7 +29,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'one time down' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_down = first(:xpath, "//a[@title='Vote down!']")
         link_vote_down.click
         sleep 0.5
@@ -40,7 +40,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'tries to vote three times up' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_up = first(:xpath, "//a[@title='Vote up!']")
         link_vote_up.click
         link_vote_up.click
@@ -53,7 +53,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'tries to vote three times down' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_down = first(:xpath, "//a[@title='Vote down!']")
         link_vote_down.click
         link_vote_down.click
@@ -66,7 +66,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'remove his vote' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_down = first(:xpath, "//a[@title='Vote down!']")
         link_vote_down.click
         link_vote_down.click
@@ -78,7 +78,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'switch vote from up to down' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_up = first(:xpath, "//a[@title='Vote up!']")
         link_vote_down = first(:xpath, "//a[@title='Vote down!']")
         link_vote_up.click
@@ -93,7 +93,7 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'switch vote from down to up' do
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_up = first(:xpath, "//a[@title='Vote up!']")
         link_vote_down = first(:xpath, "//a[@title='Vote down!']")
         link_vote_down.click
@@ -108,14 +108,14 @@ feature 'User can vote for favorite question/answer', %q{
     end
 
     scenario 'show user votes on the page' do
-      within('#question > .votes') do
+      within('#question .votes') do
         first(:xpath, "//a[@title='Vote up!']").click
         sleep 1
       end
 
       visit current_path
 
-      within('#question > .votes') do
+      within('#question .votes') do
         link_vote_up = first(:xpath, "//a[@title='Vote up!']")
         link_vote_down = first(:xpath, "//a[@title='Vote down!']")
 
@@ -128,7 +128,7 @@ feature 'User can vote for favorite question/answer', %q{
     scenario 'cannot vote for his question' do
       visit question_path(question_user)
 
-      within('#question > .votes') do
+      within('#question .votes') do
         expect(page).to_not have_css '.vote-link'
       end
     end

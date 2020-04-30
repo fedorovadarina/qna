@@ -1,10 +1,9 @@
 .votes.d-flex.flex-column
-  - if current_user && !current_user.author_of?(resource)
-    .vote-up
-      = vote_link(resource, :up)
+  .vote-up
+    = vote_link(resource, :up)
 
-    .vote-down.order-3
-      = vote_link(resource, :down)
+  .vote-down.order-3
+    = vote_link(resource, :down)
 
   = content_tag :div, class: 'vote-rating',
           data: {"#{resource.class.name}-id": resource.id} do

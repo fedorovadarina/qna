@@ -11,11 +11,13 @@
         - if current_user&.author_of?(answer)
           .link-edit
             = link_to '#', title: 'Edit', class: 'edit-answer-link', data: {answer_id: answer.id}
+              = octicon 'pencil', width: 16
           .link-delete
             = link_to answer_path(answer), title: 'Delete',
                     method: :delete,
                     data: {confirm: 'Are you sure?'},
-                    remote: true
+                    remote: true do
+              = octicon 'trashcan', width: 16
 
       .card-content.col-11
         h5.card-title = answer.body

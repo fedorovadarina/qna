@@ -8,6 +8,8 @@ module AnswersHelper
             type: "button",
             remote: true,
             'aria-pressed': "false",
-            params: {question: @question}
+            params: {question: @question} do
+      octicon 'heart', width: 16
+    end
   end
 end
