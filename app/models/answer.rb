@@ -1,4 +1,6 @@
 class Answer < ApplicationRecord
+  include Votable
+
   belongs_to :author, class_name: 'User'
   belongs_to :question
   has_many :links, dependent: :destroy, as: :linkable
@@ -8,6 +10,7 @@ class Answer < ApplicationRecord
   has_many_attached :files
 
   validates :body, presence: true
+  validates :rating, presence: true, numericality: { only_integer: true }
 
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
