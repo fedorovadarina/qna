@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :update, :destroy, :delete_file]
   before_action :load_question, only: [:show, :update, :destroy, :best_answer]
   before_action :authority!, only: [:update, :destroy, :best_answer]
+  after_action :publish, only: :create
 
   def index
     @questions = Question.all
@@ -52,6 +53,12 @@ class QuestionsController < ApplicationController
       flash.now[:alert] = 'You must be the author of question'
       render :show
     end
+  end
+
+  def publish
+    return if @question.errors.present?
+    ActionCable.server.broadcast 'questions', ApplicationController.render(
+        partial: 'questions/question', locals: { question: @question })
   end
 
   def load_question
