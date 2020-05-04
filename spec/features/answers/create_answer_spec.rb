@@ -7,6 +7,7 @@ feature 'user can create answer to the question', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
+  given!(:question2) { create(:question) }
 
   describe 'Authenticated user', js: true do
     background do
@@ -46,6 +47,44 @@ feature 'user can create answer to the question', %q{
       within answer_block do
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+  end
+
+  describe 'ActionCable multiple sessions', js: true do
+    scenario "answer appears on another user's question page" do
+      text = Faker::Number.hexadecimal(10)
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest2') do
+        visit question_path(question2)
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+
+        fill_in 'Your answer', with: text
+        click_on 'Create Answer'
+
+        expect(current_path).to eq question_path(question)
+        expect(page).to have_content 'Answer successfully created'
+
+        within '.answers-list' do
+          expect(page).to_not have_content 'No answers yet'
+          expect(page).to have_content text, count: 1
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content text
+      end
+
+      Capybara.using_session('guest2') do
+        expect(page).to_not have_content text
       end
     end
   end

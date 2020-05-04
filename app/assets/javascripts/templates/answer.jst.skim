@@ -1,0 +1,36 @@
+-if @answer
+  li.card.answer-list__item data-answer-id= @answer.id
+    .card-body.row
+      .actions.col-1.text-center
+        - if gon.user_id?
+          .votes.d-flex.flex-column
+            .vote-up
+              a.vote-link data-remote='true' data-type='json' data-answer-id='#{@answer.id}' data-method='post' href="/answers/#{@answer.id}/vote_up"
+                svg width="24" class="octicon octicon-triangle-up" viewBox="0 0 12 16" version="1.1" height="32" aria-hidden="true"
+                  path fill-rule="evenodd" d="M12 11L6 5l-6 6h12z"
+            .vote-down.order-3
+              a.vote-link data-remote='true' data-type='json' data-answer-id='#{@answer.id}' data-method='post' href="/answers/#{@answer.id}/vote_down"
+                svg width="24" class="octicon octicon-triangle-down" viewBox="0 0 12 16" version="1.1" height="32" aria-hidden="true"
+                  path fill-rule="evenodd" d="M0 5l6 6 6-6H0z"
+            .vote-rating data-answer-id= @answer.id 0
+
+
+      .card-content.col-11
+        h5.card-title = @answer.body
+
+        - if @links.length
+          p.links-list
+            'Links:
+            - for link in @links
+              span>
+                a href="#{link.url}" #{link.name}
+
+        - if @files.length
+          p.links-list
+            'File:
+            - for file in @files
+              span>
+                a href="#{file.url}" #{file.name}
+
+        h6.card-subtitle.mb-2.text-muted.answer__attrs>
+          'Author: <strong>#{@author.email}</strong> at #{@answer.updated_at}

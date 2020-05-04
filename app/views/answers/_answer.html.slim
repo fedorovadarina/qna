@@ -4,7 +4,7 @@
       .actions.col-1.text-center
         = render 'shared/votes', resource: answer
 
-        - if current_user&.author_of?(@question)
+        - if current_user&.author_of?(answer.question)
           .link-best
             = link_to_best(answer)
 

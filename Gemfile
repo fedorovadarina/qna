@@ -11,6 +11,8 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+
+gem 'sprockets'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -31,7 +33,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'mini_magick', '~> 4.8'
 
 # Amazon S3
- gem 'aws-sdk-s3'
+gem 'aws-sdk-s3'
 
 gem "octokit", "~> 4.0"
 
@@ -45,6 +47,10 @@ gem 'devise'
 gem 'jquery-rails'
 gem 'bootstrap'
 gem 'octicons_helper'
+
+# ActionCable
+gem 'gon'
+gem 'skim'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

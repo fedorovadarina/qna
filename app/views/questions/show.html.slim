@@ -1,11 +1,11 @@
-#question
+#question data-question-id=@question.id
   =render 'block_of_question'
 hr
 h2 Answers
 
 ul.answers-list
   - if @question.answers.present?
-    = render @question.answers
+    = render @question.answers.best_first
   - else
     li No answers yet
 

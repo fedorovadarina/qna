@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
   before_action :find_answer, only: [:update, :destroy, :best]
   before_action :find_question, only: [:create, :update, :destroy, :best]
   before_action :authority!, only: [:update, :destroy]
+  after_action :publish, only: :create
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -57,5 +58,22 @@ class AnswersController < ApplicationController
 
   def find_question
     @question = @answer&.question || Question.find(params[:question_id])
+  end
+
+  def publish
+    return if @answer.errors.present?
+
+    ActionCable.server.broadcast "question#{@question.id}:answers",
+                                 { answer: @answer,
+                                   author: @answer.author,
+                                   links: @answer.links,
+                                   files: files_data }
+  end
+
+  def files_data
+    @answer.files.map do |file| { id: file.id,
+                                  url: url_for(file),
+                                  name: file.filename.to_s }
+    end
   end
 end

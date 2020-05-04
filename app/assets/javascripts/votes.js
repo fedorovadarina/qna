@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(){
-    $('.vote-link').on ('ajax:success', function(e) {
+    $('section.content').on ('ajax:success', '.vote-link', function(e) {
         e.preventDefault();
         $('#flash').html('');
         var response = e.detail[0];
