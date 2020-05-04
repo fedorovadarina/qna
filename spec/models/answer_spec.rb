@@ -20,6 +20,7 @@ RSpec.describe Answer, type: :model do
   end
 
   it_behaves_like 'votable'
+  it_behaves_like 'commentable'
 
   describe 'set best attribute' do
     it 'to true' do
