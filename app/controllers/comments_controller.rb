@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_commentable, only: %i[create]
+  after_action :publish, only: :create
 
   def create
     @comment = @commentable.comments.new(comment_params)
@@ -31,12 +32,7 @@ class CommentsController < ApplicationController
   def render_comment
     respond_to do |format|
       format.json do
-        render json: { resource: @commentable.class.name.downcase,
-                       resource_id: @commentable.id,
-                       id: @comment.id,
-                       author: @comment.author.email,
-                       updated_at: @comment.updated_at.to_datetime.to_formatted_s(:db),
-                       body: @comment.body }
+        render json: comment_json_data
       end
     end
   end
@@ -47,5 +43,28 @@ class CommentsController < ApplicationController
         render json: @comment.errors, status: :unprocessable_entity
       end
     end
+  end
+
+  def publish
+    return if @comment.errors.present?
+
+    ActionCable.server.broadcast "question#{question_id}:comments", comment_json_data
+  end
+
+  def question_id
+    if @commentable.is_a? Answer
+      @commentable.question.id
+    else
+      @commentable.id
+    end
+  end
+
+  def comment_json_data
+    { resource: @commentable.class.name.downcase,
+      resource_id: @commentable.id,
+      id: @comment.id,
+      author: @comment.author,
+      updated_at: @comment.updated_at.to_datetime.to_formatted_s(:db),
+      body: @comment.body }
   end
 end

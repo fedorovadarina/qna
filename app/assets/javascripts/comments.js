@@ -11,7 +11,7 @@ $(document).on('turbolinks:load', function(){
         $('#flash').html('');
         var [data, status, xhr] = e.detail;
 
-        var commentsList = $('.card[data-' + data.resource + '-id=' + data.resource_id +']' + ' .comments-list');
+        var commentsList = $('[data-' + data.resource + '-id=' + data.resource_id +'] .comments-list');
 
         commentsList.append(JST["templates/comment"]({ comment: data }));
 

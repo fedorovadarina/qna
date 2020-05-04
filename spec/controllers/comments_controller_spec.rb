@@ -43,7 +43,7 @@ RSpec.describe CommentsController, type: :controller do
           comment_json_ok = {
               resource: commentable_classname,
               resource_id: comment.commentable.id,
-              author: comment.author.email,
+              author: comment.author,
               id: comment.id + 1,
               updated_at: comment.updated_at.to_datetime.to_formatted_s(:db),
               body: comment_attrs[:body]
@@ -51,6 +51,23 @@ RSpec.describe CommentsController, type: :controller do
 
           expect(JSON.parse(response.body)).to include_json JSON.parse(comment_json_ok)
         end
+
+        it "broadcast to #questionXX:comments when POST #create" do
+            comment_attrs = attributes_for(:comment)
+ 
+            expect do
+              post :create,
+                   format: :json,
+                   params: { comment: comment_attrs,
+                             commentable: commentable_classname,
+                             "#{commentable_classname}_id" => comment.commentable.id }
+            end
+                .to have_broadcasted_to("question#{question_id}:comments")
+                        .from_channel(CommentsChannel)
+                        .with a_hash_including(body: comment_attrs[:body],
+                                               resource: commentable_classname,
+                                               resource_id: comment.commentable.id)
+          end
       end
 
       context 'with invalid attributes' do
@@ -74,6 +91,14 @@ RSpec.describe CommentsController, type: :controller do
           expect(response.status).to eq 422
         end
       end
+    end
+  end
+
+  def question_id
+    if commentable_classname == "answer"
+      comment.commentable.question.id
+    else
+      comment.commentable.id
     end
   end
 

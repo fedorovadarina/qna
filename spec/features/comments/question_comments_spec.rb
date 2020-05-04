@@ -7,6 +7,7 @@ feature 'user can add comment to question', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
+  given!(:question2) { create(:question) }
   given!(:comment) { create(:comment, commentable: question, author: user) }
   given!(:comments) { create_list(:comments_list, 3, commentable: question) }
 
@@ -42,6 +43,46 @@ feature 'user can add comment to question', %q{
       end
 
       expect(page).to have_content "Comment can't be blank"
+    end
+  end
+
+  describe 'ActionCable multiple sessions', js: true do
+    scenario "comment appears on another user's question page" do
+      text = Faker::Number.hexadecimal(10)
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest2') do
+        visit question_path(question2)
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+
+        within '#question' do
+          click_on 'Write comment'
+          fill_in 'Your comment', with: text
+          click_on 'Create Comment'
+
+          expect(current_path).to eq question_path(question)
+
+          within '.comments-list' do
+            expect(page).to have_content text
+            expect(page).to have_content text, count: 1
+          end
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content text
+      end
+
+      Capybara.using_session('guest2') do
+        expect(page).to_not have_content text
+      end
     end
   end
 
