@@ -41,6 +41,8 @@ h1.question__title = @question.title
           p.question_attrs.text-muted
             'Question author: <em>#{@question.author.email}</em>
             
-            - if current_user&.author_of?(@question)
-              = form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
-                = render partial: 'form_fields', locals: { f: f }
+          - if current_user&.author_of?(@question)
+            = form_with model: @question, class: 'hide', html: {id: "edit-question-form"} do |f|
+              = render partial: 'form_fields', locals: { f: f }
+
+          = render 'comments/comment_block', resource: @question

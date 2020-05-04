@@ -1,0 +1,6 @@
+li.card.comment-list__item data-comment-id= @comment.id
+  .card-body.row
+    .card-content
+      p.card-title = @comment.body
+      h6.card-subtitle.mb-2.text-muted>
+        'Author: <strong>#{@comment.author}</strong> at #{@comment.updated_at}

@@ -39,3 +39,5 @@
         - if current_user&.author_of?(answer)
           = form_with model: answer, class: 'hide', html: { id: "edit-answer-#{answer.id}"} do |f|
             = render partial: 'answers/form_fields', locals: {f: f}
+
+        = render 'comments/comment_block', resource: answer

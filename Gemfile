@@ -59,6 +59,7 @@ group :development, :test do
   gem 'action-cable-testing'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'rspec-json_expectations'
 end
 
 group :development do

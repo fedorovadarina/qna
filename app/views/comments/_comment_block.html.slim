@@ -1,0 +1,30 @@
+.comments
+  ul.comments-list
+    - if resource.comments.present?
+      h6>
+        'Comments:
+      = render resource.comments
+
+  - if user_signed_in?
+    = link_to 'Write comment', '#',
+            class: 'new-comment-link',
+            data: { type: :json,
+                    'resource-id': resource.id,
+                    'resource-type': resource.class.name.downcase }
+
+    = form_with model: [resource, Comment.new],
+            class: 'comment-form hide',
+            remote: true,
+            html: {id: "comment-#{resource.class.name.downcase}-#{resource.id}"} do |f|
+
+      = hidden_field_tag 'commentable', "#{resource.class.name.downcase}"
+
+      .form-group.row
+        = f.label :body, class: 'col-sm-2 col-form-label'
+          'Your comment
+        .col-sm-10
+          = f.text_area :body, class: 'form-control'
+
+      .form-group.row
+        .col
+          = f.submit class: 'btn btn-primary float-right comment-submit'

@@ -17,7 +17,7 @@ $(document).on('turbolinks:load', function(){
 
         divRating.html(response.rating);
     })
-    .on ('ajax:error', function(e) {
+    .on ('ajax:error', '.vote-link', function(e) {
         var errors = e.detail[0];
 
         $.each(errors, function (index, value) {
