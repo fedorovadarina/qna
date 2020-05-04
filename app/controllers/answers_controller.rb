@@ -64,16 +64,17 @@ class AnswersController < ApplicationController
     return if @answer.errors.present?
 
     ActionCable.server.broadcast "question#{@question.id}:answers",
-                                 { answer: @answer,
-                                   author: @answer.author,
-                                   links: @answer.links,
-                                   files: files_data }
+                                 answer: @answer,
+                                 author: @answer.author,
+                                 links: @answer.links,
+                                 files: files_data
   end
 
   def files_data
-    @answer.files.map do |file| { id: file.id,
-                                  url: url_for(file),
-                                  name: file.filename.to_s }
+    @answer.files.map do |file|
+      { id: file.id,
+        url: url_for(file),
+        name: file.filename.to_s }
     end
   end
 end

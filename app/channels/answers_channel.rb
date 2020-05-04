@@ -1,6 +1,10 @@
 class AnswersChannel < ApplicationCable::Channel
   def follow(data)
-    stream_from "question#{data['question_id'].to_i}:answers"
+    if data['question_id']
+      stream_from "question#{data['question_id']}:answers"
+    else
+      reject
+    end
   end
 
   def unfollow
